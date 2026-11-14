@@ -161,8 +161,7 @@ These are ordered by how directly they address the main failure (the model does 
 - HF model: https://huggingface.co/commandofss/geodatum-curated (collection: https://huggingface.co/collections/commandofss/geodatum-models)
 - HF dataset: https://huggingface.co/datasets/commandofss/geodatum-data (collection: https://huggingface.co/collections/commandofss/geodatum-dataset)
 - GitHub: https://github.com/commandofss/geodatum
-- Demo / video: [LINK or remove this line]
-
+- Demo / video: https://youtu.be/FyYnG5suGIQ
 ## Reproduction
 
 ```bash
