@@ -160,6 +160,7 @@ These are ordered by how directly they address the main failure (the model does 
 
 - HF model: https://huggingface.co/commandofss/geodatum-curated (collection: https://huggingface.co/collections/commandofss/geodatum-models)
 - HF dataset: https://huggingface.co/datasets/commandofss/geodatum-data (collection: https://huggingface.co/collections/commandofss/geodatum-dataset)
+- HF dashboard: https://huggingface.co/spaces/commandofss/geodatum-dashboard
 - GitHub: https://github.com/commandofss/geodatum
 - Demo / video: https://youtu.be/FyYnG5suGIQ
 ## Reproduction
@@ -185,3 +186,5 @@ All code and data in this repo were written between 9 and 13 November 2026. No e
 ## Teammates
 
 None (solo).
+
+
