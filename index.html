@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GeoDatum: results dashboard</title>
+<style>
+:root{--bg:#f3f5fb;--card:#ffffffb8;--ink:#17203a;--mut:#5a6685;--line:#5a6bb02e;--a:#5b5bf0;--b:#0e9f8e;--bad:#e5484d;--sh:0 16px 36px #2a3c8a2e;box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#171f40b8;--ink:#e8ecff;--mut:#98a4cd;--line:#96aaff2e;--b:#2dd4bf;--sh:0 16px 36px #0008}}
+:root[data-theme="dark"]{--bg:#0b1020;--card:#171f40b8;--ink:#e8ecff;--mut:#98a4cd;--line:#96aaff2e;--b:#2dd4bf;--sh:0 16px 36px #0008}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);background-image:radial-gradient(60rem 30rem at 8% -10%,#5b5bf055,transparent),radial-gradient(50rem 28rem at 100% 0,#14b8a633,transparent);color:var(--ink);font:16px/1.55 ui-sans-serif,system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1080px;margin:auto;padding:28px 18px 60px}
+h1{font-size:clamp(2.2rem,7vw,3.6rem);margin:.15em 0;line-height:1.05;background:linear-gradient(90deg,var(--a),var(--b),#f59e0b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);max-width:760px}
+.chips span{display:inline-block;margin:6px 6px 0 0;padding:5px 12px;border-radius:99px;background:var(--card);border:1px solid var(--line);font-size:.82rem;box-shadow:var(--sh)}
+h2{margin:46px 0 14px;font-size:1.35rem}
+.grid,.steps{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));perspective:1000px}
+.steps{gap:14px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.card{background:var(--card);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--sh),inset 0 1px 0 #ffffff55;transition:transform .35s,box-shadow .35s;transform-style:preserve-3d}
+.card:hover{transform:translateY(-6px) rotateX(5deg) rotateY(-5deg);box-shadow:0 26px 50px #2a3c8a45}
+.card h3{margin:0 0 4px;font-size:.95rem}
+.row{display:flex;justify-content:space-between;font-size:.85rem;color:var(--mut);margin:10px 0 4px}
+.bar{height:14px;border-radius:9px;background:#8a96c433;box-shadow:inset 0 2px 5px #0004;overflow:hidden}
+.f{height:100%;width:var(--w);border-radius:9px;animation:g 1.3s cubic-bezier(.2,.8,.2,1) both}
+.f.b{background:linear-gradient(#aab3d6,#7f8ab5)}
+.f.a{background:linear-gradient(#8f8fff,#4646d8);box-shadow:0 3px 10px #5b5bf088}
+.f.x{background:var(--bad)}
+@keyframes g{from{width:0}}
+.big{font-size:2rem;font-weight:800;line-height:1.1}
+.good{color:var(--b)}.badc{color:var(--bad)}
+small,.n{color:var(--mut);font-size:.8rem}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:480px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line)}
+th{color:var(--mut);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.call{border-left:6px solid var(--bad)}
+.step b{display:block;font-size:.78rem;color:var(--a);margin-bottom:4px}
+.step p{margin:0;font-size:.88rem}
+ul{padding-left:1.2rem;margin:.4rem 0}
+li{margin:.35rem 0}
+pre{overflow-x:auto;background:#0b1020;color:#cfe1ff;padding:14px;border-radius:12px;font-size:.82rem}
+a{color:var(--a);font-weight:600}
+.links a{display:inline-block;margin:4px 8px 4px 0;padding:8px 14px;border-radius:12px;background:var(--card);border:1px solid var(--line);text-decoration:none;box-shadow:var(--sh)}
+footer{margin-top:40px;color:var(--mut);font-size:.85rem}
+@media(prefers-reduced-motion:reduce){.f{animation:none}.card{transition:none}.card:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="chips"><span>Track 1 · Fine-tuning &amp; Data Curation</span><span>#6 Verifiable answers</span><span>Tiny Aya Global 3.35B</span><span>LoRA · 4-bit</span><span>Free T4 GPU</span></div>
+<h1>GeoDatum</h1>
+<p class="sub">A small model that calls a verified converter for Nigerian survey coordinates, and an honest look at where it still fails to ask. Tool calls went from 6 of 56 to 56 of 56 correct; asking when the datum or grid is missing did not improve (3 of 44 before, 0 of 44 after).</p>
+</header>
+
+<h2>Before → after</h2>
+<p class="sub">First 100 test rows, same rows, same scorer and stop rule for both. “Before” is the untrained base model with the same system prompt.</p>
+<section class="grid">
+<div class="card"><h3>Correct tool call</h3><div class="big good">10.7% → 100%</div>
+<div class="row"><span>Before</span><span>6/56</span></div><div class="bar"><div class="f b" style="--w:10.7%"></div></div>
+<div class="row"><span>After</span><span>56/56</span></div><div class="bar"><div class="f a" style="--w:100%"></div></div><small>n = 56</small></div>
+<div class="card"><h3>End-to-end correct</h3><div class="big good">7.1% → 37.5%</div>
+<div class="row"><span>Before</span><span>4/56</span></div><div class="bar"><div class="f b" style="--w:7.1%"></div></div>
+<div class="row"><span>After</span><span>21/56</span></div><div class="bar"><div class="f a" style="--w:37.5%"></div></div><small>n = 56 · about ±13 points</small></div>
+<div class="card"><h3>Asks when datum/grid missing</h3><div class="big badc">6.8% → 0.0%</div>
+<div class="row"><span>Before</span><span>3/44</span></div><div class="bar"><div class="f b" style="--w:6.8%"></div></div>
+<div class="row"><span>After</span><span>0/44</span></div><div class="bar"><div class="f x" style="--w:2%"></div></div><small>n = 44 · did not improve</small></div>
+<div class="card"><h3>Clean stop</h3><div class="big good">24% → 100%</div>
+<div class="row"><span>Before</span><span>24/100</span></div><div class="bar"><div class="f b" style="--w:24%"></div></div>
+<div class="row"><span>After</span><span>100/100</span></div><div class="bar"><div class="f a" style="--w:100%"></div></div><small>n = 100</small></div>
+</section>
+
+<div class="card call" style="margin-top:22px"><h3 class="badc">Main negative result</h3>
+<p style="margin:.3em 0">After training the model starts every reply with a tool call. It guesses <b>UTM 31N</b> when the grid is missing, fills in Minna when the datum is missing, and copies an unsupported <b>UTM 33N</b> straight from the user. Two causes are untested: the loss covered every token (<code>assistant_only_loss=False</code>), and 75 steps on 600 rows may be too little.</p></div>
+
+<h2>By scenario (first 100 test rows)</h2>
+<div class="card tw"><table>
+<tr><th>Scenario</th><th>Scored</th><th>Before</th><th>After</th><th>n</th></tr>
+<tr><td>complete_inside</td><td>end-to-end</td><td>7.5%</td><td>40.0%</td><td>40</td></tr>
+<tr><td>complete_outside</td><td>end-to-end</td><td>6.2%</td><td>31.2%</td><td>16</td></tr>
+<tr><td>missing_grid</td><td>asks</td><td>0.0%</td><td>0.0%</td><td>10</td></tr>
+<tr><td>missing_datum</td><td>asks</td><td>7.7%</td><td>0.0%</td><td>13</td></tr>
+<tr><td>missing_both</td><td>asks</td><td>16.7%</td><td>0.0%</td><td>12</td></tr>
+<tr><td>unsupported_zone</td><td>asks</td><td>0.0%</td><td>0.0%</td><td>9</td></tr>
+</table></div>
+
+<h2>Why asking matters: same numbers, five grids</h2>
+<div class="card tw"><p style="margin-top:0">E 600000, N 892340 on the Minna datum lands in very different places:</p><table>
+<tr><th>Grid</th><th>Latitude</th><th>Longitude</th></tr>
+<tr><td>UTM 31N</td><td>8.07282</td><td>3.90677</td></tr>
+<tr><td>UTM 32N</td><td>8.07283</td><td>9.90687</td></tr>
+<tr><td>West Belt</td><td>12.05042</td><td>7.88961</td></tr>
+<tr><td>Mid Belt</td><td>12.07030</td><td>7.85110</td></tr>
+<tr><td>East Belt</td><td>12.03168</td><td>7.81597</td></tr>
+</table></div>
+
+<h2>Pipeline</h2>
+<section class="steps">
+<div class="card step"><b>1 · CONVERTER</b><p>pyproj/PROJ answer key and tool, five Minna grids</p></div>
+<div class="card step"><b>2 · GENERATOR</b><p>2,000 train · 600 test, six scenarios, no client data</p></div>
+<div class="card step"><b>3 · CURATORKIT</b><p>2,000 in, 2,000 out; 1,498 tool-call rows unchanged</p></div>
+<div class="card step"><b>4 · ALIGNTUNE</b><p>LoRA, 4-bit; 7.67M of 3.36B parameters (0.23%)</p></div>
+<div class="card step"><b>5 · SCORING</b><p>score.py and AuditKIT on the same 100 rows</p></div>
+</section>
+
+<h2>What didn’t work</h2>
+<div class="card"><ul>
+<li>A first 200-row adapter looped: it ended with <code>&lt;|END_RESPONSE|&gt;</code> and began a new turn, and the scorer didn’t stop on that token.</li>
+<li>The first prompt said “Nigeria Mid Belt” while the tool expects “Mid Belt”, so the model copied the wrong name.</li>
+<li>A first AuditKIT run reused a cached result because the two runs had identical fingerprints; we caught it by cross-checking against our own scorer.</li>
+</ul></div>
+
+<h2>Limits and next steps</h2>
+<section class="grid">
+<div class="card"><h3>Limits</h3><ul><li>Synthetic, templated, in-distribution data</li><li>Minna datum only</li><li>“Inside Nigeria” is a bounding box</li><li>600 of 2,000 rows, 100 test rows, one run</li><li>No real users yet</li></ul></div>
+<div class="card"><h3>To test next</h3><ul><li>Loss on the reply only</li><li>Train longer on all 2,000 rows</li><li>Contrast pairs: same coordinates with and without the grid</li><li>Reward-based training with the converter as the reward</li><li>A check outside the model for missing inputs</li></ul></div>
+</section>
+
+<h2>Links</h2>
+<div class="links">
+<a href="https://github.com/commandofss/geodatum">GitHub repo</a>
+<a href="https://huggingface.co/commandofss/geodatum-curated">HF model</a>
+<a href="https://huggingface.co/datasets/commandofss/geodatum-data">HF dataset</a>
+<a href="https://huggingface.co/collections/commandofss/geodatum-models">Models collection</a>
+<a href="https://huggingface.co/collections/commandofss/geodatum-dataset">Dataset collection</a>
+<a href="https://youtu.be/FyYnG5suGIQ">Demo video</a>
+</div>
+
+<h2>Reproduce</h2>
+<pre>pip install pyproj curatorkit aligntune peft bitsandbytes auditkit
+python geodatum_converter.py
+python generate_dataset.py --n 2000 --seed 1 --out train.jsonl
+python generate_dataset.py --n 600 --seed 2 --out test.jsonl --exclude train.jsonl
+python curate.py train.jsonl output/clean_messages
+python score.py --test test.jsonl --label after --adapter ./run1 --limit 100 --out after.json</pre>
+
+<footer>Solo project · Lexsi AI Safety and Alignment Hackathon · Tiny Aya Global is licensed CC-BY-NC (non-commercial). This page summarises the results; the full write-up is the README.</footer>
+</div>
+</body>
+</html>
